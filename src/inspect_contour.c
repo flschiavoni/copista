@@ -29,6 +29,7 @@ string inspect_countour(vector<Point> contour){
 
     std::stringstream ss;
     ss << "Perimeter: " << arcLength(contour, true) << " ";
+    ss << "Size:" << contour.size() << " ";
     ss << "Angle:" << min_area.angle << " ";
     ss << "Center:" << min_area.center << " ";
     ss << "Size:" << min_area.size << " ";
@@ -44,7 +45,6 @@ string inspect_countour(vector<Point> contour){
     ss << "width:" << rect.width << " ";
     ss << "height:" << rect.height << " ";
     ss << "area:" << rect.area() << " ";
-    ss << "| Points x:" << contour.size() << " ";
  
 //    ss << "| Moments:" << mu << " ";
 

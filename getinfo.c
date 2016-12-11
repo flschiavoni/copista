@@ -12,28 +12,50 @@
 
 #include <sstream>
 #include <string>
+#include <fstream> // to txt file
 
 #include "copista.h"
 
 using namespace cv;
 using namespace std;
 
-int main(int, char** argv){
-    vector<string> filelist = list_files(argv[1]);
-    for (int i = 0 ; i < filelist.size() ; i++){
-        std::stringstream ss;
-        ss << argv[1] << filelist[i];
-        Mat score = open_image(ss.str());
-        if (score.empty()){
-            cerr << "No image supplied ... " << filelist[i] << endl;
-            continue;
-        }
-        vector<vector<Point> > contours = get_contours(score, 100);
-        vector<Point> contour = find_biggest_contour(contours);
-        string s = inspect_countour(contour);
-        cout << filelist[i] << ": " << s << endl;
+void file_info(const char * file_name){
+    ofstream outputFile;
+    string name = file_name;
+    string ext = ".txt";
+    name = name + ext;
+    outputFile.open(name.c_str());
+    Mat score = open_image(file_name);
+    if (score.empty()){
+        cerr << "No image supplied ... " << file_name << endl;
+        return;
     }
-    cout << " -----------------------------------\n";
+    cout << "File: " << file_name << endl;
+    outputFile << "File: " << file_name << endl;
+    cout << inspect_image(score) << endl;
+    outputFile << inspect_image(score) << endl;
+    vector<vector<Point> > contours = get_contours(score, 100);
+    vector<Point> contour = find_biggest_contour(contours);
+    string s = inspect_countour(contour);
+    cout << s << endl;
+    outputFile << s << endl;
+    outputFile.close();
+    cout << "Output on file: " << name << endl;
+    cout << "------------------------------------------" << endl;
+}
+
+int main(int, char** argv){
+    cout << "------------------------------------------" << endl;
+    if (is_file(argv[1]))
+        file_info(argv[1]);
+    else{
+        vector<string> filelist = list_files(argv[1]);
+        for (int i = 0 ; i < filelist.size() ; i++){
+            std::stringstream ss;
+            ss << argv[1] << filelist[i];
+            file_info(ss.str().c_str());
+        }
+    }
     cout << "Finished!\n";
     return(0);
 }

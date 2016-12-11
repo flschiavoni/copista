@@ -14,7 +14,9 @@ crop: crop.c
 		crop.c -o crop -I. `pkg-config --cflags --libs opencv`
 
 getinfo: getinfo.c
-	g++ src/inspect_contour.c \
+	g++ \
+		src/inspect_contour.c \
+		src/inspect_image.c \
 		src/print_points.c \
 		src/is_file.c \
 		src/calculate_mass_center.c \
